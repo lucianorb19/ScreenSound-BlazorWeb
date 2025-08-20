@@ -20,5 +20,13 @@ namespace ScreenSound.Web.Services
             return await
                 _httpClient.GetFromJsonAsync<ICollection<ArtistaResponse>>("artistas");
         }
+
+        //MÉTODO QUE RETORNA UMA COLEÇÃO DE ArtistaResponse DA API
+        //FILTRANDO PELO NOME
+        public async Task<ICollection<ArtistaResponse>?> GetArtistasDeNomeAsync(string nome)
+        {
+            return await
+                _httpClient.GetFromJsonAsync<ICollection<ArtistaResponse>>($"artistas/{nome}");
+        }
     }
 }
