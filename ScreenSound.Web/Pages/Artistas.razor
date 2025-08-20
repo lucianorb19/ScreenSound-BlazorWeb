@@ -1,23 +1,34 @@
 ﻿@page "/Artistas"
+@inject ArtistaAPI artistaAPI
+
 
 <h3>Artistas</h3>
-<h4>@Mensagem</h4>
-
-@code {
-    public string? Mensagem { get; set; } = "Olá !";
-
-
-/*
-DEFINIÇÃO DA ROTA
-@page "/Artistas" 
-
-CORPO DA PÁGINA
-<h3>Artistas</h3>              
-<h4>@Mensagem</h4>  
-
-CÓDIGO C#
-@code {
-    public string? Mensagem { get; set; } = "Olá !";
-
-*/
+@if(artistas is not null)
+{
+    foreach(var artista in artistas)
+    {
+        <p>@artista.Nome</p>
+    }
 }
+
+
+@code {
+    //ATRIBUTOS - CAMPOS
+    private ICollection<ArtistaResponse>? artistas;
+
+    //DEMAIS MÉTODOS
+    //SOBRECARGA DO MÉTO OnInitializedAsync PARA QUE, SEMPRE QUE A ROTA Artistas
+    //FOR CONSULTADA, A COLEÇÃO artistas VAI RECEBER O RESULTADO DE 
+    // artistaAPI.GetArtistasAsync(), QUE FOI DEFINIDA EM ArtistaAPI.cs
+    protected override async Task OnInitializedAsync()
+    {
+        artistas = await artistaAPI.GetArtistasAsync();
+    }
+
+    //OU SEJA, SEMPRE QUE ACESSADO A ROTA Artistas
+    //É MOSTRADO NA TELA A LISTAGEM DE ARTISTAS - MÉTODO app.MapGet("Artistas") DA API
+
+}
+
+
+
