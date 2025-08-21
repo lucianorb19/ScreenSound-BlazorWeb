@@ -37,5 +37,18 @@ namespace ScreenSound.Web.Services
             await _httpClient.PostAsJsonAsync("artistas", artista);
         }
 
+        //MÉTODO QUE RETORNA UM ArtistaResponse DADO UMA STRING Nome
+        public async Task<ArtistaResponse?> GetArtistaPorNomeAsync(string nome)
+        {
+            return await _httpClient
+                .GetFromJsonAsync<ArtistaResponse>($"/artistas/{nome}");
+        }
+
+        public async Task DeleteArtistaAsync(int id)
+        {
+            await _httpClient
+                .DeleteAsync($"artistas/{id}");
+        }
+
     }
 }

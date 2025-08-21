@@ -29,6 +29,12 @@
                        Class="ml-auto">
                 Cadastrar
             </MudButton>
+            <MudButton Variant="Variant.Filled"
+                       @onclick="Voltar"
+                       Color="Color.Default"
+                       class="ml-auto">
+                Voltar
+            </MudButton>
         </div>
 
     </MudForm>
@@ -44,6 +50,11 @@
         var request = new ArtistaRequest(nome!, biografia!);
         await artistasAPI.AddArtistaAsync(request);
         navigationManager.NavigateTo("/Artistas");
+    }
+
+    private void Voltar()
+    {
+        navigationManager.NavigateTo("..", true);//PÁGINA ANTERIOR
     }
 
     /*

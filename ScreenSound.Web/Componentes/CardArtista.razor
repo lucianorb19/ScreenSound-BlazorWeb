@@ -11,6 +11,15 @@
         <MudText Typo="Typo.body2">@Artista!.Bio</MudText>
     </MudCardContent>
 
+    <MudCardActions>
+        <MudButton Color="Color.Warning"
+                          Variant="Variant.Outlined"
+                          Href=@($"/EditarArtista/{Artista!.Nome}")>
+                          
+            Detalhes
+        </MudButton>
+    </MudCardActions>
+
 </MudCard>
 
 @code {
@@ -19,7 +28,11 @@
 
     /*
      NESSE COMPONENTE, O ATRIBUTO Artista É DEFINIDO COMO UM PARÂMETRO
-     PQ ELE É USADO NUM LAÇO EM Pages/Artistas.razor ASSUMINDO PARA CADA ITERAÇÃO
-     DO LAÇO UM VALOR DIFERENTE
+     PQ ELE É USADO EM Pages/Artistas.razor ASSUMINDO PARA CADA ITERAÇÃO
+     DO LAÇO UM VALOR DIFERENTE NO COMPONENTE MudItem
+
+     CardArtista.razor - COMPONENTE COM O PARÂMETRO Artista
+     Artistas.razor - PÁGINA RAZOR QUE USA O PARÂMETRO Artista DENTRO DE
+     SEU COMPONENTE CardArtista EM MudItem
      */
 }
