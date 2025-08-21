@@ -5,10 +5,14 @@
 <h3>Artistas</h3>
 @if(artistas is not null)
 {
-    foreach(var artista in artistas)
+    <MudGrid>
+    @foreach(var artista in artistas)
     {
-        <p>@artista.Nome</p>
+        <MudItem xs="3">
+            <CardArtista Artista="artista"/>
+        </MudItem>
     }
+    </MudGrid>
 }
 
 
@@ -28,6 +32,12 @@
     //OU SEJA, SEMPRE QUE ACESSADO A ROTA Artistas
     //É MOSTRADO NA TELA A LISTAGEM DE ARTISTAS - MÉTODO app.MapGet("Artistas") DA API
 
+    //<MudItem xs="3"> - DEFINE QUE PAR CADA LINHA, HAVERÁ 3 ESPAÇOS ENTRE, OS ITENS,
+    //OU SEJA, 4 ITENS
+
+    //<CardArtista Artista="artista"/> - O ITEM CardArtista RECEBE A VARIÁVEL 
+    //artista, USANDO PARÂMETRO Artista EM CADA REPETIÇÃO
+    
 }
 
 
