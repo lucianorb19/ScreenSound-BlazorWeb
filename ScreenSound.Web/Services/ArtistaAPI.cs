@@ -50,5 +50,11 @@ namespace ScreenSound.Web.Services
                 .DeleteAsync($"artistas/{id}");
         }
 
+        public async Task UpdateArtistaAsync (ArtistaRequestEdit artista)
+        {
+            await _httpClient
+                .PutAsJsonAsync($"artistas", artista);
+        }
+
     }
 }
