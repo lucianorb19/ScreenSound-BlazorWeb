@@ -22,6 +22,19 @@
                       Required="true"
                       RequiredError="Campo obrigatório." />
 
+        <MudImage Class="mt-4" src="@fileImage"/>
+        <MudFileUpload T="IBrowserFile" Accept=".jpeg" FilesChanged="UploadFile">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.PhotoCamera"
+                           for="@context">
+                    Foto de Perfil
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+
         <div class="d-flex align-center justify-space-between mt-4">
             <MudButton Variant="Variant.Filled"
                        @onclick="Cadastrar"
@@ -44,6 +57,7 @@
 
     private string? nome;
     private string? biografia;
+    private string? fileImage; //IMAGEM NO FORMULÁRIO
 
     private async Task Cadastrar()
     {
@@ -57,11 +71,33 @@
         navigationManager.NavigateTo("..", true);//PÁGINA ANTERIOR
     }
 
+    private async Task UploadFile(IBrowserFile file)
+    {
+        long maxFileSize = 1024 * 1024 * 15;//ARQUIVO DE NO MÁXIMO 15MB
+        var format = "image/jpeg";
+        //IMAGEM QUE APARECE NO FORMULÁRIO - FORMATO JPEG E TAMANHO MENOR
+        var resizedImage = await file.RequestImageFileAsync(format, 200, 200);
+
+        //FileStream e MemoryStream PARA SALVAR A IMAGEM COMO UM JPEG EM BASE64 (STRING)
+        using var fileStream = resizedImage.OpenReadStream();
+        using var memoryStream = new MemoryStream();
+        await fileStream.CopyToAsync(memoryStream);
+
+        fileImage = $"data:{format};base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+    }
+
     /*
       @bind-Value="nome" - RELACIONA O CAMPO COM A VARIÁVEL nome
       @onclick="Cadastrar" - RELACIONA O EVENTO DE CLICAR COM A FUNÇÃO Cadastrar
       SENDO QUE ESSA FUNÇÃO INSTANCIA UM OBJETO ArtistaRequest e CADASTRA ELE 
       NA BASE DE DADOS DA API, POR MEIO DO SERVIÇO artistasAPI
+
+      ---------------
+      <MudImage Class="mt-4" src="@fileImage"/> - MOSTRA NO FORMULÁRIO A IMAGEM DO
+      UPLOAD
+
+      <MudFileUpload T="IBrowserFile" Accept=".jpeg" FilesChanged="UploadFile">
+      COMPONENTE QUE FAZ O UPLOAD - MÉTODO UploadFile NA SEÇÃO @code
      */
 
 }
