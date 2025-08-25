@@ -34,6 +34,8 @@ app.UseCors(options =>
 
 });
 
+app.UseStaticFiles();//FOTOS DE PERFIL DA API PODEM SER APRESENTADAS NO PROJETO WEB
+
 app.AddEndPointsArtistas();
 app.AddEndPointsMusicas();
 app.AddEndPointGeneros();

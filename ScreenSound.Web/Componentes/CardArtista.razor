@@ -1,5 +1,5 @@
 ﻿<MudCard>
-    <MudCardMedia Image="images/cardArtista.png"></MudCardMedia>
+    <MudCardMedia Image=@Imagem></MudCardMedia>
 
     <MudCardHeader>
         <CardHeaderContent>
@@ -25,6 +25,20 @@
 @code {
     [Parameter]
     public ArtistaResponse? Artista{ get; set; }
+
+    //SEMPRE QUE UM COMPONENTE CardArtista É INSTANCIADO, O VALOR DE SEU ATRIBUTO Imagem
+    //(QUE É O CAMPO APRESENTADO NA INTERFACE, NA IMAGEM DO CARD)
+    //RECEBE O CAMINHO DE https://localhost:7089/{Artista!.FotoPerfil},
+    //CASO O CAMINHO ABSOLUTO DO ARQUIVO CONTENHA A PALAVRA Foto 
+    //(O QUE SEMPRE ACONTECE CASO TENHA SIDO ADICIONADO NA PASTA FotosPerfil)
+    //SE NÃO CONTER, OU SEJA, AINDA NÃO HÁ FOTO PARA ESSE ARTISTA, UMA FOTO PADRÃO É USADA
+    public string? Imagem { get; set; }
+    protected override void OnInitialized()
+    {
+        Imagem =
+        Artista!.FotoPerfil!.Contains("Foto") ?
+        $"https://localhost:7089/{Artista!.FotoPerfil}" : "images/cardArtista.png";
+    }
 
     /*
      NESSE COMPONENTE, O ATRIBUTO Artista É DEFINIDO COMO UM PARÂMETRO
