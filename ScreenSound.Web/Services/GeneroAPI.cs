@@ -17,9 +17,9 @@ public class GeneroAPI
 
 
     //DEMAIS MÉTODOS
-    public async Task<List<GeneroResponse>?> GetGenerosAsync()
+    public async Task<ICollection<GeneroResponse>?> GetGenerosAsync()
     {
-        return await _httpClient.GetFromJsonAsync<List<GeneroResponse>>("generos");
+        return await _httpClient.GetFromJsonAsync<ICollection<GeneroResponse>>("generos");
     }
 
     public async Task<GeneroResponse?> GetGeneroPorNomeAsync(string nome)
