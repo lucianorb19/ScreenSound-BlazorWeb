@@ -1,11 +1,11 @@
 ﻿@page "/EditarArtista/{NomeArtista}"
-
-@inject ArtistaAPI artistasAPI
+@inject ArtistasAPI artistasAPI
 @inject NavigationManager navigationManager
+@if (Artista is not null)
+{
+    <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
-<MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
-
-    <MudText Class="mt-8" Typo="Typo.h4">Editar Artista</MudText>
+    <MudText Class="mt-8" Typo="Typo.h4">Edição de Artista</MudText>
 
     <MudForm>
 
@@ -24,100 +24,63 @@
 
         <div class="d-flex align-center justify-space-between mt-4">
             <MudButton Variant="Variant.Filled"
-                       @onclick="Editar"
-                       Color="Color.Secondary"
-                       Class="ml-auto">
+                       Color="Color.Primary"
+                       Class="ml-auto"
+                       @onclick="Editar">
                 Salvar
             </MudButton>
-            
             <MudButton Variant="Variant.Filled"
                        @onclick="Deletar"
                        Color="Color.Secondary"
-                       Class="ml-auto">
+                       Class="ml-3">
                 Deletar
             </MudButton>
-
             <MudButton Variant="Variant.Filled"
-                       @onclick="Voltar"
-                       Color="Color.Default"
-                       class="ml-auto">
+                       Color="Color.Info"
+                       Class="ml-3"
+                       @onclick="VoltarParaListagem">
                 Voltar
             </MudButton>
-
-            
-
-            
         </div>
 
     </MudForm>
 </MudPaper>
+}
+else
+{
+    <MudProgressCircular Indeterminate="true"></MudProgressCircular>
+}
 
 @code {
     private string? nome;
     private string? biografia;
-
     [Parameter]
-    public string? NomeArtista{ get; set; }//VEM DA URL
+    public string? NomeArtista { get; set; }
 
-    //OBJETO USADO PARA CONSULTAR NA API O ARTISTA DE NOME NomeArtista
-    public ArtistaResponse Artista { get; set; }
+    public ArtistaResponse? Artista { get; set; }
 
-    //AO CARREGAR A PÁGINA, OS CAMPOS DE ID nome e biografia
-    //SÃO PREENCHIDOS COM AS INFORMAÇÕES CARREGADAS DA API
     protected override async Task OnInitializedAsync()
     {
         Artista = await artistasAPI.GetArtistaPorNomeAsync(NomeArtista!);
-        //CAMPOS DO FORMULÁRIO RECEBEM AS INFORMAÇÕES DA API
         nome = Artista!.Nome;
         biografia = Artista!.Bio;
     }
 
     private async Task Deletar()
-    {
+    {        
         await artistasAPI.DeleteArtistaAsync(Artista!.Id);
         navigationManager.NavigateTo("/Artistas");
     }
 
     private async Task Editar()
     {
-        var requestEdit = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!,"");
-        await artistasAPI.UpdateArtistaAsync(requestEdit);
+        var requestEdit = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!,Artista!.FotoPerfil);
+        await artistasAPI.UpdateArtistaAsync(requestEdit);           
+        navigationManager.NavigateTo("/Artistas");     
+    }
+
+    private void VoltarParaListagem()
+    {
         navigationManager.NavigateTo("/Artistas");
     }
-
-    private void Voltar()
-    {
-        navigationManager.NavigateTo("..", true);//PÁGINA ANTERIOR
-    }
-
-
-
-
-    /*
-     OBSERVAÇÕES
-
-     PARÂMETRO NA URL É RENOMEADO PARA NomeArtista
-     @page "/EditarArtista/{NomeArtista}"
-     
-     E UMA VARIÁVEL DE MESMO NOME ASSUME SEU VALOR (POR TER O MESMO NOME)
-     [Parameter]
-     public string? NomeArtista{ get; set; }//VEM DA URL
-     
-
-     -------------
-     AO CARREGAR A PÁGINA, OS CAMPOS DE ID nome e biografia
-     SÃO PREENCHIDOS COM AS INFORMAÇÕES CARREGADAS DA API
-     
-     public ArtistaResponse Artista { get; set; }
-     
-     protected override async Task OnInitializedAsync()
-     {
-         Artista = await artistasAPI.GetArtistaPorNomeAsync(NomeArtista!);
-         //CAMPOS DO FORMULÁRIO RECEBEM AS INFORMAÇÕES DA API
-         nome = Artista!.Nome;
-         biografia = Artista!.Bio;
-     }
-
-     */
-
 }

@@ -34,43 +34,25 @@ public static class ArtistasExtensions
 
         });
 
-        app.MapPost("/Artistas", async ([FromServices] IHostEnvironment env,
-                                  [FromServices] DAL<Artista> dal, 
-                                  [FromBody] ArtistaRequest artistaRequest) =>
+        app.MapPost("/Artistas",async ([FromServices]IHostEnvironment env,[FromServices] DAL<Artista> dal, [FromBody] ArtistaRequest artistaRequest) =>
         {
-            //NOME DO ARQUIVO FOTO DE PERFIL É
-            //DATA DE AGORA + NOME ARTISTA.jpeg
-            var nome = artistaRequest.nome;
-            var nomeArquivoImagemArtista = DateTime.Now.ToString("ddMMyyyhhss")+nome+".jpeg";
+            var nome = artistaRequest.nome.Trim();
+            var imagemArtista = DateTime.Now.ToString("ddMMyyyyhhss") + "." + nome + ".jpeg";
 
-            //CAMINHO PARA SALVAR A FOTO DE PERFIL
-            //PASTA wwwroot/FotosPefil
-            var path = Path.Combine(
-                env.ContentRootPath, "wwwroot", "FotosPerfil", nomeArquivoImagemArtista);
+            var path = Path.Combine(env.ContentRootPath,
+    "wwwroot", "FotosPerfil", imagemArtista);
 
-            //CRIAÇÃO DA IMAGEM NA PASTA
             using MemoryStream ms = new MemoryStream(Convert.FromBase64String(artistaRequest.fotoPerfil!));
             using FileStream fs = new(path, FileMode.Create);
             await ms.CopyToAsync(fs);
 
-
             var artista = new Artista(artistaRequest.nome, artistaRequest.bio)
             {
-                //CAMINHO DA FOTO DO PERFIL SALVA NO CAMPO FotoPerfil
-                FotoPerfil = $"/FotosPerfil/{nomeArquivoImagemArtista}"
+                FotoPerfil = $"/FotosPerfil/{imagemArtista}"
             };
 
             dal.Adicionar(artista);
             return Results.Ok();
-
-            /*
-            OBSERVAÇÕES
-            
-            async ([FromServices] IHostEnvironment env
-            NECESSÁRIO PARA QUE A FUNÇÃO CONSIGA ENCONTRAR O CAMINHO
-            ABSOLUTO DO ARQUIVO
-            ( O async É PELO USO DE await ms.CopyToAsync(fs) )
-             */
         });
 
         app.MapDelete("/Artistas/{id}", ([FromServices] DAL<Artista> dal, int id) => {

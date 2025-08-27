@@ -1,52 +1,29 @@
 ﻿<MudCard>
     <MudCardMedia Image=@Imagem></MudCardMedia>
-
     <MudCardHeader>
         <CardHeaderContent>
             <MudText Typo="Typo.h6">@Artista!.Nome</MudText>
-        </CardHeaderContent>
-    </MudCardHeader>
-
-    <MudCardContent>
-        <MudText Typo="Typo.body2">@Artista!.Bio</MudText>
-    </MudCardContent>
-
-    <MudCardActions>
-        <MudButton Color="Color.Warning"
-                          Variant="Variant.Outlined"
-                          Href=@($"/EditarArtista/{Artista!.Nome}")>
-                          
-            Detalhes
-        </MudButton>
-    </MudCardActions>
-
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudText Typo="Typo.body2">@Artista!.Bio</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Color="Color.Warning"
+                       Variant="Variant.Outlined"
+                       Href=@($"/EditarArtista/{Artista!.Nome}")>Detalhes</MudButton>
+        </MudCardActions>
 </MudCard>
 
-@code {
+    @code {
     [Parameter]
-    public ArtistaResponse? Artista{ get; set; }
+    public ArtistaResponse? Artista { get; set; }
 
-    //SEMPRE QUE UM COMPONENTE CardArtista É INSTANCIADO, O VALOR DE SEU ATRIBUTO Imagem
-    //(QUE É O CAMPO APRESENTADO NA INTERFACE, NA IMAGEM DO CARD)
-    //RECEBE O CAMINHO DE https://localhost:7089/{Artista!.FotoPerfil},
-    //CASO O CAMINHO ABSOLUTO DO ARQUIVO CONTENHA A PALAVRA Foto 
-    //(O QUE SEMPRE ACONTECE CASO TENHA SIDO ADICIONADO NA PASTA FotosPerfil)
-    //SE NÃO CONTER, OU SEJA, AINDA NÃO HÁ FOTO PARA ESSE ARTISTA, UMA FOTO PADRÃO É USADA
     public string? Imagem { get; set; }
+
     protected override void OnInitialized()
     {
-        Imagem =
-        Artista!.FotoPerfil!.Contains("Foto") ?
-        $"https://localhost:7089/{Artista!.FotoPerfil}" : "images/cardArtista.png";
+        Imagem = Artista!.FotoPerfil!.Contains("Foto") ? $"https://localhost:7089/{Artista!.FotoPerfil}" : "images/cardArtista.png";
     }
 
-    /*
-     NESSE COMPONENTE, O ATRIBUTO Artista É DEFINIDO COMO UM PARÂMETRO
-     PQ ELE É USADO EM Pages/Artistas.razor ASSUMINDO PARA CADA ITERAÇÃO
-     DO LAÇO UM VALOR DIFERENTE NO COMPONENTE MudItem
-
-     CardArtista.razor - COMPONENTE COM O PARÂMETRO Artista
-     Artistas.razor - PÁGINA RAZOR QUE USA O PARÂMETRO Artista DENTRO DE
-     SEU COMPONENTE CardArtista EM MudItem
-     */
 }

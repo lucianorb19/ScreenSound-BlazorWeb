@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider Theme="currentTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -15,3 +15,10 @@
         @Body
     </MudMainContent>
 </MudLayout>
+
+@code {
+    private MudTheme currentTheme = new MudTheme()
+        {
+            Palette = ScreendsoundPallete.CreatePallete
+        };
+}

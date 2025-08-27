@@ -1,8 +1,6 @@
 ﻿@page "/CadastrarArtista"
-
-@inject ArtistaAPI artistasAPI
+@inject ArtistasAPI artistasAPI
 @inject NavigationManager navigationManager
-
 <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
     <MudText Class="mt-8" Typo="Typo.h4">Cadastro do Artista</MudText>
@@ -22,7 +20,7 @@
                       Required="true"
                       RequiredError="Campo obrigatório." />
 
-        <MudImage Class="mt-4" src="@fileImage"/>
+        <MudImage Class="mt-4" src="@fileImage" />
         <MudFileUpload T="IBrowserFile" Accept=".jpeg" FilesChanged="UploadFile">
             <ButtonTemplate>
                 <MudButton HtmlTag="label"
@@ -42,23 +40,17 @@
                        Class="ml-auto">
                 Cadastrar
             </MudButton>
-            <MudButton Variant="Variant.Filled"
-                       @onclick="Voltar"
-                       Color="Color.Default"
-                       class="ml-auto">
-                Voltar
-            </MudButton>
         </div>
 
     </MudForm>
 </MudPaper>
 
 @code {
-
     private string? nome;
     private string? biografia;
-    private string? fileImage; //IMAGEM NO FORMULÁRIO
-    private string? fotoPerfil; //IMAGEM PARA SALVAR NO BD PELA API
+
+    private string? fileImage;
+    private string? fotoPerfil;
 
     private async Task Cadastrar()
     {
@@ -66,21 +58,12 @@
         await artistasAPI.AddArtistaAsync(request);
         navigationManager.NavigateTo("/Artistas");
     }
-
-    private void Voltar()
-    {
-        navigationManager.NavigateTo("..", true);//PÁGINA ANTERIOR
-    }
-
-    //MÉTODO ACIONADO QUANDO A IMAGEM DE PERFIL É ADICIONADA
     private async Task UploadFile(IBrowserFile file)
     {
-        long maxFileSize = 1024 * 1024 * 15;//ARQUIVO DE NO MÁXIMO 15MB
+        long maxFileSize = 1024 * 1024 * 15;
         var format = "image/jpeg";
-        //IMAGEM QUE APARECE NO FORMULÁRIO - FORMATO JPEG E TAMANHO MENOR
         var resizedImage = await file.RequestImageFileAsync(format, 200, 200);
 
-        //FileStream e MemoryStream PARA SALVAR A IMAGEM COMO UM JPEG EM BASE64 (STRING)
         using var fileStream = resizedImage.OpenReadStream();
         using var memoryStream = new MemoryStream();
         await fileStream.CopyToAsync(memoryStream);
@@ -89,19 +72,4 @@
         fileImage = $"data:{format};base64,{imageUpload}";
         fotoPerfil = imageUpload;
     }
-
-    /*
-      @bind-Value="nome" - RELACIONA O CAMPO COM A VARIÁVEL nome
-      @onclick="Cadastrar" - RELACIONA O EVENTO DE CLICAR COM A FUNÇÃO Cadastrar
-      SENDO QUE ESSA FUNÇÃO INSTANCIA UM OBJETO ArtistaRequest e CADASTRA ELE 
-      NA BASE DE DADOS DA API, POR MEIO DO SERVIÇO artistasAPI
-
-      ---------------
-      <MudImage Class="mt-4" src="@fileImage"/> - MOSTRA NO FORMULÁRIO A IMAGEM DO
-      UPLOAD
-
-      <MudFileUpload T="IBrowserFile" Accept=".jpeg" FilesChanged="UploadFile">
-      COMPONENTE QUE FAZ O UPLOAD - MÉTODO UploadFile NA SEÇÃO @code
-     */
-
-}
+ }

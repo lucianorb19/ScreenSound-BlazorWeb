@@ -10,13 +10,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddMudServices();
 
-//ADICIONANDO SERVIÇO DE ArtistaAPI - CONSUMO DE Artistas da API
-builder.Services.AddTransient<ArtistaAPI>();
-//builder.Services.AddTransient<MusicasAPI>();
+builder.Services.AddTransient<ArtistasAPI>();
+builder.Services.AddTransient<MusicasAPI>();
+builder.Services.AddTransient<GeneroAPI>();
 
-//ADICIONANDO SERVIÇO DE HttpClient
-builder.Services.AddHttpClient("API", client =>
-{
+builder.Services.AddHttpClient("API", client => {
     client.BaseAddress = new Uri(builder.Configuration["APIServer:Url"]!);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });

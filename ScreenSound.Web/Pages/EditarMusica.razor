@@ -1,24 +1,22 @@
 ﻿@page "/EditarMusica/{NomeMusica}"
-@inject ArtistaAPI artistasAPI
+@inject ArtistasAPI artistasAPI
 @inject GeneroAPI generoAPI
-@inject MusicaAPI musicaAPI
+@inject MusicasAPI musicaAPI
 @inject NavigationManager navigationManager
 
 <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
-    <MudText Class="mt-8" Typo="Typo.h4">Editar Música</MudText>
+    <MudText Class="mt-8" Typo="Typo.h4">Edição de Música</MudText>
 
     <MudForm>
 
-        <MudTextField Class="mt-4" T="string" Placeholder="Nome da música"
+        <MudTextField Class="mt-4" T="string" Placeholder="Nome da música/canção"
                       @bind-Value="nome"
                       Variant="Variant.Outlined"
                       Required="true"
                       RequiredError="Campo obrigatório." />
 
-        <MudSelect Class="mt-4" T="ArtistaResponse" Label="Artistas" 
-                   Variant="Variant.Outlined" ValueChanged="ArtistaSelecionado" 
-                   AnchorOrigin="Origin.BottomCenter">
+        <MudSelect Class="mt-4" T="ArtistaResponse" Label="Artistas" Variant="Variant.Outlined" ValueChanged="ArtistaSelecionado" AnchorOrigin="Origin.BottomCenter">
             @if (artistas is not null)
             {
                 @foreach (var artista in artistas)
@@ -109,8 +107,8 @@
         }
     }
 
-    public async Task Deletar() //Implementação do método que deleta a música.
-    {
+    public async Task Deletar()
+    {        
         await musicaAPI.DeleteMusicaAsync(Musica!.Id);
         navigationManager.NavigateTo("/MusicasPorArtista");
 
