@@ -12,6 +12,13 @@
             Artista/Banda: @Musica!.NomeArtista
         </MudText>
     </MudCardContent>
+
+    <MudCardActions>
+        <MudButton Color="Color.Warning"
+                   Variant="Variant.Outlined"
+                   Href=@($"/EditarMusica/{Musica!.Nome}")>Detalhes</MudButton>
+    </MudCardActions>
+
 </MudCard>
 
 @code {
