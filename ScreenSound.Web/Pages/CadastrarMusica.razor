@@ -58,8 +58,9 @@
                 Cadastrar
             </MudButton>
             <MudButton Variant="Variant.Filled"
-                       Color="Color.Info"
-                       Class="ml-3">
+                       @onclick="Voltar"
+                       Color="Color.Secondary"
+                       Class="ml-auto">
                 Voltar
             </MudButton>
         </div>
@@ -115,5 +116,10 @@
         await musicaAPI.AddMusicaAsync(musicaRequest);
         navigationManager.NavigateTo("/MusicasPorArtista");
         
+    }
+
+    private void Voltar()
+    {
+        navigationManager.NavigateTo("..", true);//PÁGINA ANTERIOR
     }
 }

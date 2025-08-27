@@ -40,6 +40,12 @@
                        Class="ml-auto">
                 Cadastrar
             </MudButton>
+            <MudButton Variant="Variant.Filled"
+                       @onclick="Voltar"
+                       Color="Color.Secondary"
+                       Class="ml-auto">
+                Voltar
+            </MudButton>
         </div>
 
     </MudForm>
@@ -58,6 +64,7 @@
         await artistasAPI.AddArtistaAsync(request);
         navigationManager.NavigateTo("/Artistas");
     }
+
     private async Task UploadFile(IBrowserFile file)
     {
         long maxFileSize = 1024 * 1024 * 15;
@@ -71,5 +78,10 @@
         var imageUpload = Convert.ToBase64String(memoryStream.ToArray());
         fileImage = $"data:{format};base64,{imageUpload}";
         fotoPerfil = imageUpload;
+    }
+
+    private void Voltar()
+    {
+        navigationManager.NavigateTo("..", true);//PÁGINA ANTERIOR
     }
  }
